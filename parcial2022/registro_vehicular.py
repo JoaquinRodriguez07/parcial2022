@@ -85,19 +85,40 @@ class RegistroVehicular:
 
     def get_multas(self):
         for auto in self.vehiculos:
-            if auto.get_matricula() == "CBY1234":
+            if auto.get_matricula() == "ABC1234":
                 multas = auto.get_multa()
                 break
         cont = 0
         for multa in multas:
             if multa is not None:
                 cont += 1
-                print(multa.get_concepto())
+                print(multa.get_esta_paga())
 
         if cont == 0:
             print("El vehiculo no tiene multas")
-                        
-            
+    
+    def pagar_multa_vehiculo(self, matricula, concepto, importe):
+
+        cont = 0 
+        for auto in self.vehiculos:
+            if auto.get_matricula() == matricula:
+                cont += 1
+                nave = auto
+                break
+        
+        if cont == 0:
+            raise EntidadNoExiste()
+
+        elif cont >=1:
+            for multa in nave.get_multa():
+                if multa.get_concepto() == concepto and multa.get_importe() == importe and multa.get_esta_paga()==False:
+                    multa.set_esta_paga()
+                    break
+        
+    
+    
+
+
 
 
 
@@ -120,4 +141,7 @@ if __name__ == "__main__":
     registro_vehicular.registrar_multa_vehiculo("ABC1234", "Exceso de velocidad", 1234, True, 65, 60)
     registro_vehicular.registrar_multa_vehiculo("ABC1234", "Exceso de velocidad", 1234, True, 65, 60)
     registro_vehicular.registrar_multa_vehiculo("ABC1234", "Mal estacionamiento", 12334, False, None, None)
+    registro_vehicular.pagar_multa_vehiculo("ABC1234", "Exceso de velocidad", 1234)
     registro_vehicular.get_multas()
+
+

@@ -27,6 +27,9 @@ class ExcesoVelocidad(Multa):
     def get_esta_paga(self):
         return self.__esta_paga
     
+    def set_esta_paga(self):
+        self.__esta_paga = True
+    
     
 
 
