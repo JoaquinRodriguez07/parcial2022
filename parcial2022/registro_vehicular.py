@@ -3,7 +3,7 @@ from entities.vehiculo import Vehiculo
 from entities.multa import Multa
 from entities.exceso_velocidad import ExcesoVelocidad
 from entities.persona import Persona
-from exceptions.excepciones import EntidadYaExiste, InformacionInvalida
+from exceptions.excepciones import EntidadYaExiste, InformacionInvalida, EntidadNoExiste
 
 
 class RegistroVehicular:
@@ -32,7 +32,8 @@ class RegistroVehicular:
             self.personas.append(persona)
             vehiculo = Vehiculo(matricula, nro_padron)
             self.vehiculos.append(vehiculo)
-            # persona.get_vehiculo().append(vehiculo)
+            vehiculo.set_persona(persona)
+
 
         elif cont == 1:
             for vehiculo in self.vehiculos:
@@ -46,6 +47,61 @@ class RegistroVehicular:
     def get_personas(self):
         for persona in self.personas:
             print(persona.get_cedula())
+    
+
+    def registrar_multa_vehiculo(self,matricula, concepto, importe, es_exceso_velocidad, velocidad_vehiculo, velocidad_limite):
+
+        if matricula == "" or concepto == "" or importe == "" or  es_exceso_velocidad == "" or velocidad_vehiculo == "" or velocidad_limite == "":
+            raise InformacionInvalida()
+        
+        cont = 0
+        for auto in self.vehiculos:
+            if auto.get_matricula() == matricula:
+                cont = 1    
+                if es_exceso_velocidad == True:
+                    multa_exceso = ExcesoVelocidad(velocidad_vehiculo, velocidad_limite, concepto, importe, False)
+                    multas_auto = auto.get_multa()
+                    multas_auto.append(multa_exceso)
+                    car = auto
+                    break
+                else:
+                    multas_auto = auto.get_multa()
+                    multas_auto.append(Multa(concepto, importe, False))
+                    car = auto
+                    break
+        
+        if cont == 0:
+            raise EntidadNoExiste()
+        
+        cont2 = 0
+        cont2 = 0
+        for multa in car.get_multa():
+            if isinstance(multa, ExcesoVelocidad):
+                cont2 += 1
+        
+        if cont2 >= 3:
+            person = car.get_persona()
+            person.set_libreta_suspendida()
+
+    def get_multas(self):
+        for auto in self.vehiculos:
+            if auto.get_matricula() == "CBY1234":
+                multas = auto.get_multa()
+                break
+        cont = 0
+        for multa in multas:
+            if multa is not None:
+                cont += 1
+                print(multa.get_concepto())
+
+        if cont == 0:
+            print("El vehiculo no tiene multas")
+                        
+            
+
+
+
+
 
 if __name__ == "__main__":
     
@@ -58,5 +114,10 @@ if __name__ == "__main__":
     registro_vehicular.registrar_vehiculo("CBA1234", 3, 12345678)
     registro_vehicular.registrar_vehiculo("CBY1234", 3, 12348278)
 
-    print(registro_vehicular.get_autos())
-    print(registro_vehicular.get_personas())
+    registro_vehicular.get_autos()
+    registro_vehicular.get_personas()
+    registro_vehicular.registrar_multa_vehiculo("ABC1234", "Exceso de velocidad", 1234, True, 65, 60)
+    registro_vehicular.registrar_multa_vehiculo("ABC1234", "Exceso de velocidad", 1234, True, 65, 60)
+    registro_vehicular.registrar_multa_vehiculo("ABC1234", "Exceso de velocidad", 1234, True, 65, 60)
+    registro_vehicular.registrar_multa_vehiculo("ABC1234", "Mal estacionamiento", 12334, False, None, None)
+    registro_vehicular.get_multas()

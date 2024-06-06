@@ -5,7 +5,8 @@ class Vehiculo:
     def __init__(self, matricula, padron):
         self.__matricula = matricula
         self.__padron = padron
-        self.persona = []
+        self.persona = ""
+        self.multa = []
     
 
     def get_matricula(self):
@@ -16,4 +17,9 @@ class Vehiculo:
     
     def get_persona(self):
         return self.persona
+    def get_multa(self):
+        return self.multa
+    
+    def set_persona(self, new):
+        self.persona = new
     

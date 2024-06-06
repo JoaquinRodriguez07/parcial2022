@@ -3,3 +3,6 @@ class InformacionInvalida(Exception):
 
 class EntidadYaExiste(Exception):
     pass
+
+class EntidadNoExiste(Exception):
+    pass

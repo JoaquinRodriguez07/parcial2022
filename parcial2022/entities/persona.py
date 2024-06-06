@@ -6,6 +6,7 @@ class Persona:
         self.__libreta_suspendida = libreta_suspendida
         self.vehiculos = []
     
+    #getters
     def get_cedula(self):
         return self.__cedula
     
@@ -14,4 +15,8 @@ class Persona:
     
     def get_vehiculo(self):
         return self.vehiculos
+    
+    #Setters
+    def set_libreta_suspendida(self):
+        self.__libreta_suspendida = True
     
