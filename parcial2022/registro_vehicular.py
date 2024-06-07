@@ -42,7 +42,8 @@ class RegistroVehicular:
         
     def get_autos(self):
         for auto in self.vehiculos:
-            print(auto.get_matricula())
+            p = auto.get_persona()
+            print(p.get_cedula())
     
     def get_personas(self):
         for persona in self.personas:
@@ -114,13 +115,33 @@ class RegistroVehicular:
                 if multa.get_concepto() == concepto and multa.get_importe() == importe and multa.get_esta_paga()==False:
                     multa.set_esta_paga()
                     break
+    
+    def traspaso_vehiculo(self, cedula_titular, matricula, cedula_nuevo_titular):
+
+        cont = 0
+        for persona in self.personas:
+            if persona.get_cedula() == cedula_nuevo_titular:
+                new_prop = persona
+                cont +=1
+                break
         
-    
-    
-
-
-
-
+        if cont == 0:
+            raise EntidadNoExiste()
+        cont2 = 0
+        for per in self.personas:
+            if per.get_cedula() == cedula_titular:
+                old_prop = per
+                cont2 +=1
+                break
+        
+        if cont2 == 0:
+            raise EntidadNoExiste
+        
+        for auto in self.vehiculos:
+            if auto.get_persona() == old_prop:
+                auto.set_persona(new_prop)
+                break
+        
 
 
 
@@ -136,12 +157,16 @@ if __name__ == "__main__":
     registro_vehicular.registrar_vehiculo("CBY1234", 3, 12348278)
 
     registro_vehicular.get_autos()
-    registro_vehicular.get_personas()
+    
     registro_vehicular.registrar_multa_vehiculo("ABC1234", "Exceso de velocidad", 1234, True, 65, 60)
     registro_vehicular.registrar_multa_vehiculo("ABC1234", "Exceso de velocidad", 1234, True, 65, 60)
     registro_vehicular.registrar_multa_vehiculo("ABC1234", "Exceso de velocidad", 1234, True, 65, 60)
     registro_vehicular.registrar_multa_vehiculo("ABC1234", "Mal estacionamiento", 12334, False, None, None)
     registro_vehicular.pagar_multa_vehiculo("ABC1234", "Exceso de velocidad", 1234)
     registro_vehicular.get_multas()
+    
+    registro_vehicular.traspaso_vehiculo(12345678, "CBY1234", 12348278)
+    
+    registro_vehicular.get_autos()
 
 
