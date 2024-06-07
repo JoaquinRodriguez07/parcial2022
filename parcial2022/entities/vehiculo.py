@@ -17,8 +17,11 @@ class Vehiculo:
     
     def get_persona(self):
         return self.persona
+    
     def get_multa(self):
         return self.multa
+    
+    #setters
     
     def set_persona(self, new):
         self.persona = new
